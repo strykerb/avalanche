@@ -225,24 +225,29 @@ function CalcPosition(){
   var posY = player.pos.y;
 
   // X position
-  if (input.pos.x > posX + 1){
-    if (!box(posX+3, posY-1, 1, 6).isColliding.rect.black){
-      posX += G.MOVE_SPEED;
-    }
-  } else if (input.pos.x < posX - 1){
-    if (!box(posX-1, posY-1, 1, 6).isColliding.rect.black){
-      
-      posX -= G.MOVE_SPEED;
-    }
-  } 
-
+  if (input.isPressed){
+    if (input.pos.x > posX + 1){
+      if (!box(posX+3, posY-1, 1, 6).isColliding.rect.black){
+        posX += G.MOVE_SPEED;
+      }
+    } else if (input.pos.x < posX - 1){
+      if (!box(posX-1, posY-1, 1, 6).isColliding.rect.black){
+        
+        posX -= G.MOVE_SPEED;
+      }
+    } 
+  }
   // Y position
   if (char("a", player.pos).isColliding.rect.black){
       player.isJumping = false;
       player.jumpTick = G.JUMP_DURATION;
   } else {
     player.isJumping = true;
-    player.jumpTick++;
+    if (!input.isPressed) {
+      player.jumpTick = G.JUMP_DURATION+1;
+    } else {
+      player.jumpTick++;
+    }
     if (player.jumpTick > G.JUMP_DURATION){
       // Check horizontal block
       posY += G.JUMP_HEIGHT;
